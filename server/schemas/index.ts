@@ -13,15 +13,22 @@ const RootQuery = new GraphQLObjectType({
   fields: {
     getAllUsers: {
       type: new GraphQLList(UserType),
+      resolve() {
+        return userData; // dane zwracane z bazy
+      },
+    },
+    getUserByID: {
+      type: UserType,
       args: {
         id: { type: GraphQLInt },
       },
-      resolve(parent, args) {
-        return userData;
+      resolve(_parent, args) {
+        return userData.find((item) => item.id === args.id);
       },
     },
   },
 });
+
 const Mutation = new GraphQLObjectType({
   name: "Mutation",
   fields: {
@@ -33,7 +40,7 @@ const Mutation = new GraphQLObjectType({
         email: { type: GraphQLString },
         password: { type: GraphQLString },
       },
-      resolve(parent, args) {
+      resolve(_parent, args) {
         userData.push({ id: userData.length + 1, ...args });
         return args;
       },
