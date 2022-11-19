@@ -1,0 +1,61 @@
+Source: https://strawberry.rocks/docs
+
+// to launch
+python -m venv virtualenv
+source virtualenv/bin/activate
+pip install 'strawberry-graphql[debug-server]'
+
+strawberry server schema
+
+### exp_1
+
+```
+query {
+ books {
+    title
+    author
+  }
+}
+```
+
+### exp_2
+
+```
+query {
+ books {
+    title
+    author {
+      name
+    }
+  }
+
+  authors {
+    name
+  }
+}
+```
+
+### exp_3
+
+```
+{
+  books {
+    title
+    id
+  }
+  authors {
+    name
+    id
+  }
+}
+```
+
+### exp_5
+
+```
+query{
+  greet
+  # greet(name: null)
+  # greet(name: "Alfons")
+}
+```
