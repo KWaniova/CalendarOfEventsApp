@@ -9,11 +9,25 @@ strawberry server schema
 
 ### exp_1
 
+Enum type - (in strawberry)
+
 ```
-query {
- books {
+query{
+  books{
+  __typename
+    title,
+    type
+  }
+}
+
+{
+  # books{
+  #   type
+  #   title
+  #   id
+  # }
+  bookByType(type: FANTASY) {
     title
-    author
   }
 }
 ```

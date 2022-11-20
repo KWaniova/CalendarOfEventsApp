@@ -41,7 +41,7 @@ def get_authors() -> typing.List[Author]:
     return [Author(id=author['id'], name=author["name"]) for author in authors]
 
 
-def get_books() -> typing.List[Author]:
+def get_books() -> typing.List[Book]:
     return [Book(id=book['id'], title=book["title"]) for book in books]
 
 

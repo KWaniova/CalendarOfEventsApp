@@ -2,6 +2,8 @@ import typing
 import strawberry
 
 
+# Objects in python strawberry - fields objects structure
+
 def get_author_for_book(root) -> "Author":
     return Author(name="Michael Crichton")
 
