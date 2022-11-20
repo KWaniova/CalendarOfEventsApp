@@ -11,13 +11,13 @@ import userData from "../store/user_data";
 const RootQuery = new GraphQLObjectType({
   name: "RootQueryType",
   fields: {
-    getAllUsers: {
+    users: {
       type: new GraphQLList(UserType),
       resolve() {
         return userData; // dane zwracane z bazy
       },
     },
-    getUserByID: {
+    userByID: {
       type: UserType,
       args: {
         id: { type: GraphQLInt },
