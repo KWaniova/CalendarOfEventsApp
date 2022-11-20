@@ -48,6 +48,26 @@ query {
     id
   }
 }
+
+mutation{
+  addBook(inputBook:{
+    title: "Harry Potter and the Goblet of Fire",
+    authorId: 1
+  })
+}
+
+query MyQuery {
+  authors {
+    id
+    name
+    books {
+      title
+    }
+  }
+  books{
+    title
+  }
+}
 ```
 
 ### exp_5
