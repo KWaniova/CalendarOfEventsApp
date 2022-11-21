@@ -24,7 +24,7 @@ class Author:
     books: typing.List[Book] = strawberry.field(resolver=get_books_for_author)
 
 
-def get_authors(root) -> typing.List[Author]:
+def get_authors() -> typing.List[Author]:
     return [Author(name="Michael Crichton")]
 
 

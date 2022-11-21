@@ -1,6 +1,10 @@
 import typing
 import strawberry
 
+# mutations (returning types)
+# docstrings
+
+
 books = [
     {"id": 1, "title": "Harry Potter", "author_id": 1},
     {"id": 2, "title": "Lord of The Rings", "author_id": 2},
@@ -15,8 +19,10 @@ authors = [
 
 
 def get_author_for_book(root) -> "Author":
-    print("ROOT: ", root)
-    return Author(name="Michael Crichton")
+    book_from_database = list(filter(lambda x: x["id"] == root.id, books))[0]
+    author = list(filter(lambda x: x["id"] ==
+                         book_from_database['author_id'], authors))[0]
+    return Author(id=author['id'], name=author["name"])
 
 
 @strawberry.type(description="This is book class")
@@ -51,7 +57,7 @@ class Query:
     books: typing.List[Book] = strawberry.field(resolver=get_books)
 
 
-@strawberry.input
+@strawberry.input(description="This is input type of object")
 class AddBookForAuthor:
     title: str
     author_id: strawberry.ID
@@ -59,7 +65,7 @@ class AddBookForAuthor:
 
 @strawberry.type
 class Mutation:
-    @strawberry.mutation
+    @strawberry.mutation(description="This is mutation for adding book")
     def add_book(self, inputBook: AddBookForAuthor) -> None:
         author = list(filter(lambda x: x.id == int(
             inputBook.author_id), get_authors()))[0]

@@ -1,6 +1,8 @@
 from typing import Optional
 import strawberry
 
+# Optional parameters
+
 
 @strawberry.type
 class Query:
