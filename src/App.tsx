@@ -1,5 +1,4 @@
 import { useQuery, gql } from "@apollo/client";
-import MissionsList from "./components/missions_list";
 
 const FILMS_QUERY = gql`
   {
@@ -37,9 +36,6 @@ export default function App() {
           )
         )}
       </ul>
-      <div style={{ margin: 5 }}>
-        <MissionsList />
-      </div>
     </div>
   );
 }
