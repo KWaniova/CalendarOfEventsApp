@@ -1,16 +1,33 @@
-import { useQuery, gql } from "@apollo/client";
+import React, { useState, useContext, useEffect } from "react";
+import { gql, useQuery } from "@apollo/client";
+import CalendarHeader from "./components/CalendarHeader";
+import EventModal from "./components/EventModal";
+import Month from "./components/Month";
+import Sidebar from "./components/Sidebar";
+import GlobalContext from "./context/GlobalContext";
+import { getMonth } from "./utils/getMonth";
+
+import "./App.css";
 
 const FILMS_QUERY = gql`
-  {
-    launchesPast(limit: 10) {
+  query Me {
+    me(auth: "965ba223204c11a081fe2b611079d6dc") {
       id
-      mission_name
+      firstName
+      lastName
     }
   }
 `;
 
 export default function App() {
   const { data, loading, error } = useQuery(FILMS_QUERY);
+  console.log(data);
+  const [currenMonth, setCurrentMonth] = useState(getMonth());
+  const { monthIndex, showEventModal } = useContext(GlobalContext);
+
+  useEffect(() => {
+    setCurrentMonth(getMonth(monthIndex));
+  }, [monthIndex]);
 
   if (loading) return <>Loading...</>;
   if (error) return <pre>{error.message}</pre>;
@@ -18,24 +35,21 @@ export default function App() {
   return (
     <div
       style={{
-        width: "100vw",
         height: "100vh",
+        width: "100vw",
+        backgroundColor: "cyan",
         display: "flex",
-        alignItems: "center",
-        flexDirection: "column",
-        overflow: "scroll",
       }}
     >
-      <h1 style={{ fontFamily: "arial" }}>SpaceX Launches</h1>
-      <ul style={{ fontFamily: "arial" }}>
-        {data.launchesPast.map(
-          (launch: { id: string; mission_name: string }) => (
-            <li style={{ padding: 5 }} key={launch.id}>
-              {launch.mission_name}
-            </li>
-          )
-        )}
-      </ul>
+      {showEventModal && <EventModal />}
+
+      <div className="h-screen flex flex-col">
+        <CalendarHeader />
+        <div className="flex flex-1">
+          <Sidebar />
+          <Month month={currenMonth} />
+        </div>
+      </div>
     </div>
   );
 }
