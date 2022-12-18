@@ -1,7 +1,7 @@
 import dayjs from "dayjs";
 import React, { useContext, useEffect, useState } from "react";
-import GlobalContext from "../context/GlobalContext";
-import { getMonth } from "../utils/getMonth";
+import GlobalContext from "../../context/GlobalContext";
+import { getMonth } from "../../utils/getMonth";
 
 export default function SmallCalendar() {
   const [currentMonthIdx, setCurrentMonthIdx] = useState(
@@ -63,27 +63,31 @@ export default function SmallCalendar() {
           </button>
         </div>
       </header>
-      <div className="grid grid-cols-7 grid-rows-6">
+      <div style={{display: 'flex', flexDirection: 'column' }}>
+        <div style={{display: 'flex', marginLeft: 16 }}>
+
         {currentMonth[0].map((day, i) => (
-          <span key={i} className="text-sm py-1 text-center">
+          <span style={{flex: 1, maxWidth: 40}} key={i}>
             {day.format("dd").charAt(0)}
           </span>
         ))}
+        </div>
         {currentMonth.map((row, i) => (
-          <React.Fragment key={i}>
+          <div style={{ display: 'flex'}} key={i}>
             {row.map((day, idx) => (
               <button
+                style={{ width: 40}}
                 key={idx}
                 onClick={() => {
                   setSmallCalendarMonth(currentMonthIdx);
                   setDaySelected(day);
                 }}
-                className={`py-1 w-full ${getDayClass(day)}`}
+                
               >
-                <span className="text-sm">{day.format("D")}</span>
+                <span >{day.format("D")}</span>
               </button>
             ))}
-          </React.Fragment>
+          </div>
         ))}
       </div>
     </div>

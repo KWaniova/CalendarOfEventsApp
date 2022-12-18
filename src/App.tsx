@@ -1,9 +1,9 @@
 import React, { useState, useContext, useEffect } from "react";
 import { gql, useQuery } from "@apollo/client";
-import CalendarHeader from "./components/CalendarHeader";
+import CalendarHeader from "./components/calendar-header/calendar-header";
 import EventModal from "./components/EventModal";
 import Month from "./components/Month";
-import Sidebar from "./components/Sidebar";
+import Sidebar from "./components/Sidebar/Sidebar";
 import GlobalContext from "./context/GlobalContext";
 import { getMonth } from "./utils/getMonth";
 
@@ -21,7 +21,6 @@ const FILMS_QUERY = gql`
 
 export default function App() {
   const { data, loading, error } = useQuery(FILMS_QUERY);
-  console.log(data);
   const [currenMonth, setCurrentMonth] = useState(getMonth());
   const { monthIndex, showEventModal } = useContext(GlobalContext);
 
@@ -37,7 +36,7 @@ export default function App() {
       style={{
         height: "100vh",
         width: "100vw",
-        backgroundColor: "cyan",
+        // backgroundColor: "cyan",
         display: "flex",
       }}
     >
