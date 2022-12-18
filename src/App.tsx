@@ -36,15 +36,28 @@ export default function App() {
       style={{
         height: "100vh",
         width: "100vw",
-        // backgroundColor: "cyan",
-        display: "flex",
+        // display: "flex",
       }}
     >
       {showEventModal && <EventModal />}
 
-      <div className="h-screen flex flex-col">
+      <div
+        style={{
+          // display: "flex",
+          // flexDirection: "column",
+          width: "100%",
+          height: "100%",
+        }}
+      >
         <CalendarHeader />
-        <div className="flex flex-1">
+        <div
+          style={{
+            display: "flex",
+            width: "100%",
+            height: "100%",
+            maxHeight: "100%",
+          }}
+        >
           <Sidebar />
           <Month month={currenMonth} />
         </div>
