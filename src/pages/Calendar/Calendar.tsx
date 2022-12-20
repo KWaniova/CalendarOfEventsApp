@@ -11,6 +11,7 @@ import Button from "src/components/Button/Button";
 import Icon from "src/components/icon";
 import { ICON_TYPE } from "src/components/icon/icon";
 import { Heading } from "src/components/Typography/Typography";
+import { useModalContext } from "src/context/ModalContext/Modal";
 
 export default function Calendar() {
   const [currenMonth, setCurrentMonth] = useState(getMonth());
@@ -86,7 +87,7 @@ export default function Calendar() {
             maxHeight: "100%",
           }}
         >
-          <Sidebar />
+          {/* <Sidebar /> */}
           <Month month={currenMonth} />
         </div>
       </div>

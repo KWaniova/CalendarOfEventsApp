@@ -18,7 +18,11 @@ const CalendarHeader = ({ children }: Props) => {
         color="graySecondary"
         fontWeight={300}
         mr="normal"
-        style={{ borderRight: "1px solid gray", cursor: "pointer" }}
+        style={{
+          borderRight: "1px solid gray",
+          cursor: "pointer",
+          width: 230,
+        }}
         onClick={() => navigate(ROUTE_NAMES.calendar)}
       >
         Calendar app
