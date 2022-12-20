@@ -1,10 +1,7 @@
-import React, {
-  useState,
-  useEffect,
-  useReducer,
-  useMemo,
-} from "react";
-import GlobalContext from "./GlobalContext";
+// @ts-nocheck
+
+import { useState, useEffect, useReducer, useMemo } from "react";
+import GlobalContext, { authInitialState } from "./GlobalContext";
 import dayjs from "dayjs";
 
 function savedEventsReducer(state, { type, payload }) {
@@ -12,9 +9,7 @@ function savedEventsReducer(state, { type, payload }) {
     case "push":
       return [...state, payload];
     case "update":
-      return state.map((evt) =>
-        evt.id === payload.id ? payload : evt
-      );
+      return state.map((evt) => (evt.id === payload.id ? payload : evt));
     case "delete":
       return state.filter((evt) => evt.id !== payload.id);
     default:
@@ -28,6 +23,7 @@ function initEvents() {
 }
 
 export default function ContextWrapper(props) {
+  const [auth, setAuth] = useState(authInitialState);
   const [monthIndex, setMonthIndex] = useState(dayjs().month());
   const [smallCalendarMonth, setSmallCalendarMonth] = useState(null);
   const [daySelected, setDaySelected] = useState(dayjs());
@@ -55,17 +51,13 @@ export default function ContextWrapper(props) {
 
   useEffect(() => {
     setLabels((prevLabels) => {
-      return [...new Set(savedEvents.map((evt) => evt.label))].map(
-        (label) => {
-          const currentLabel = prevLabels.find(
-            (lbl) => lbl.label === label
-          );
-          return {
-            label,
-            checked: currentLabel ? currentLabel.checked : true,
-          };
-        }
-      );
+      return [...new Set(savedEvents.map((evt) => evt.label))].map((label) => {
+        const currentLabel = prevLabels.find((lbl) => lbl.label === label);
+        return {
+          label,
+          checked: currentLabel ? currentLabel.checked : true,
+        };
+      });
     });
   }, [savedEvents]);
 
@@ -82,11 +74,12 @@ export default function ContextWrapper(props) {
   }, [showEventModal]);
 
   function updateLabel(label) {
-    setLabels(
-      labels.map((lbl) => (lbl.label === label.label ? label : lbl))
-    );
+    setLabels(labels.map((lbl) => (lbl.label === label.label ? label : lbl)));
   }
 
+  const setToken = (token: string) => {
+    setAuth((state) => ({ ...state, token: token }));
+  };
   return (
     <GlobalContext.Provider
       value={{
@@ -106,6 +99,9 @@ export default function ContextWrapper(props) {
         labels,
         updateLabel,
         filteredEvents,
+        auth,
+        setAuth,
+        setToken,
       }}
     >
       {props.children}

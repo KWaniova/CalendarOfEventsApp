@@ -1,11 +1,11 @@
-import dayjs from "dayjs";
-import  { useContext, useState, useEffect } from "react";
-import GlobalContext from "../../context/GlobalContext";
+// @ts-nocheck
 
+import dayjs from "dayjs";
+import { useContext, useState, useEffect } from "react";
+import GlobalContext from "../../context/GlobalContext";
 
 import { Heading } from "../Typography/Typography";
 import { ClickableWrapper, DayDateWrapper, DayWrapper } from "./Day.styles";
-
 
 export default function Day({ day, rowIdx }) {
   const [dayEvents, setDayEvents] = useState([]);

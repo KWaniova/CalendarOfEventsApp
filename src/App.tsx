@@ -1,67 +1,77 @@
-import React, { useState, useContext, useEffect } from "react";
-import { gql, useQuery } from "@apollo/client";
-import CalendarHeader from "./components/calendar-header/calendar-header";
-import EventModal from "./components/EventModal";
-import Month from "./components/Month";
-import Sidebar from "./components/Sidebar/Sidebar";
-import GlobalContext from "./context/GlobalContext";
-import { getMonth } from "./utils/getMonth";
+import {
+  HashRouter as Router,
+  Route,
+  Routes,
+  Outlet,
+  Navigate,
+} from "react-router-dom";
 
 import "./App.css";
+import Login from "./pages/Login/Login";
+import Calendar from "./pages/Calendar/Calendar";
+import { useContext } from "react";
+import GlobalContext from "src/context/GlobalContext";
+import CreateNewUser from "./pages/CreateNewUser/CreateNewUser";
+import Profile from "./pages/Profile/Profile";
 
-const FILMS_QUERY = gql`
-  query Me {
-    me(auth: "965ba223204c11a081fe2b611079d6dc") {
-      id
-      firstName
-      lastName
-    }
+type ProtectedRouteProps = {
+  children?: JSX.Element;
+  isAllowed: boolean;
+  fallbackPath?: string;
+};
+
+const ProtectedRoute = ({
+  children,
+  isAllowed,
+  fallbackPath = "/",
+}: ProtectedRouteProps) => {
+  if (!isAllowed) {
+    return <Navigate to={fallbackPath} replace />;
   }
-`;
+  return children ? children : <Outlet />;
+};
+
+export const ROUTE_NAMES = {
+  login: "/",
+  create_new_user: "/create_new_user",
+  calendar: "/app/calendar",
+  profile: "/app/profile",
+};
 
 export default function App() {
-  const { data, loading, error } = useQuery(FILMS_QUERY);
-  const [currenMonth, setCurrentMonth] = useState(getMonth());
-  const { monthIndex, showEventModal } = useContext(GlobalContext);
-
-  useEffect(() => {
-    setCurrentMonth(getMonth(monthIndex));
-  }, [monthIndex]);
-
-  if (loading) return <>Loading...</>;
-  if (error) return <pre>{error.message}</pre>;
+  const { auth } = useContext(GlobalContext);
 
   return (
-    <div
-      style={{
-        height: "100vh",
-        width: "100vw",
-        // display: "flex",
-      }}
-    >
-      {showEventModal && <EventModal />}
-
-      <div
-        style={{
-          // display: "flex",
-          // flexDirection: "column",
-          width: "100%",
-          height: "100%",
-        }}
-      >
-        <CalendarHeader />
-        <div
-          style={{
-            display: "flex",
-            width: "100%",
-            height: "100%",
-            maxHeight: "100%",
-          }}
-        >
-          <Sidebar />
-          <Month month={currenMonth} />
-        </div>
-      </div>
-    </div>
+    <Router>
+      <Routes>
+        <Route path={"/"} element={<Login />} />
+        <Route path={"/create_new_user"} element={<CreateNewUser />} />
+        <Route element={<ProtectedRoute isAllowed={!!auth.token} />}>
+          <Route path={"/app/calendar"} element={<Calendar />} />
+          <Route path={"/app/profile"} element={<Profile />} />
+        </Route>
+        {/* <Route path={"/create_new_user"} element={<CreateNewUser />} /> */}
+        {/* <Route path={"/login/create_new_user"} element={<UpdatePage />} /> */}
+        {/* <Route element={<ProtectedRoute isAllowed={auth.isAuthenticated} />}>
+        <Route path={RoutesEnum.EMPTY} element={null} />
+        <Route
+          path={RoutesEnum.LOGIN_CHANGE_PASSWORD}
+          element={<ChangePasswordForm />}
+        />
+        <Route element={<DefaultLayout />}>
+          <Route path="/patients/*" element={<Patients />} />
+          <Route path="/error-logs/*" element={<ErrorLogsPages />} />
+          <Route
+            path={RoutesEnum.CHANGE_PASSWORD}
+            element={<ChangePassword />}
+          />
+          <Route
+            path={`${RoutesEnum.ADMINISTRATORS}/*`}
+            element={<Administrators />}
+          />
+        </Route>
+      </Route> */}
+      </Routes>
+    </Router>
   );
 }

@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 import ReactDOM from "react-dom";
 import { ApolloProvider, ApolloClient, InMemoryCache } from "@apollo/client";
 
@@ -9,8 +11,9 @@ import { GlobalStyle } from "./styles/GlobalStyles";
 import App from "./App";
 
 import ContextWrapper from "./context/ContextWrapper";
+import { Modal } from "./context/ModalContext/Modal";
 
-const client = new ApolloClient({
+export const client = new ApolloClient({
   uri: "http://0.0.0.0:8000/graphql",
   cache: new InMemoryCache(),
 });
@@ -22,7 +25,9 @@ ReactDOM.render(
     <ApolloProvider client={client}>
       <GlobalStyle />
       <ContextWrapper>
-        <App />
+        <Modal>
+          <App />
+        </Modal>
       </ContextWrapper>
     </ApolloProvider>
   </ThemeProvider>,

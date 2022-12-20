@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 import styled, { css } from "styled-components";
 
 export const DayWrapper = styled.div`
@@ -20,11 +22,11 @@ export const ClickableWrapper = styled.div`
 // }
 
 export const DayDateWrapper = styled.div`
-padding: 5px;
+  padding: 5px;
   ${({ active }) =>
     active &&
     css`
-      background-color: ${({theme}) => theme.colors.brandPrimary};
+      background-color: ${({ theme }) => theme.colors.brandPrimary};
       color: white;
       border-radius: 100%;
     `}

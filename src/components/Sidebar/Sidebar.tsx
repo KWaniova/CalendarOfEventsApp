@@ -1,9 +1,7 @@
 import React from "react";
-import CreateEventButton from "../CreateEventButton";
-import SmallCalendar from "../SmallCalendar/SmallCalendar";
-import Labels from "../Labels";
 
 import styled from "styled-components";
+// import CreateEventButton from "../CreateEventButton/CreateEventButton";
 
 const Wrapper = styled.aside`
   display: flex;
@@ -11,14 +9,14 @@ const Wrapper = styled.aside`
   padding: ${({ theme }) => theme.space.normal};
   margin-right: ${({ theme }) => theme.space.normal};
   border-right: 1px solid ${({ theme }) => theme.colors.grayQuaternary};
+  width: 300px;
 `;
 
 export default function Sidebar() {
   return (
     <Wrapper>
-      <CreateEventButton />
-      <SmallCalendar />
-      <Labels />
+      {/* <CreateEventButton /> */}
+      {/* <Labels /> */}
     </Wrapper>
   );
 }

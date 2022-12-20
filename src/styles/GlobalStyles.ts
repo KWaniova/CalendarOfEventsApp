@@ -19,7 +19,7 @@ export const GlobalStyle = createGlobalStyle`
   body {
     font-family: Roboto, sens-serif;
     color: ${({ theme }) => theme.colors.bodyText};
-    background: ${({ theme }) => theme.colors.bodyBackground};
+    background: ${({ theme }) => theme.colors.white};
     font-size: ${({ theme }) => theme.fontSizes.normal};
     margin: 0;
     padding: 0;

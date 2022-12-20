@@ -1,8 +1,8 @@
 import styled from "styled-components";
-import { flex, FlexProps } from "styled-system";
+import { flexbox, FlexboxProps } from "styled-system";
 
-export const FlexWrapper = styled.div<FlexProps>`
+export const FlexWrapper = styled.div<FlexboxProps>`
   display: flex;
   flex-direction: column;
-  ${flex}
+  ${flexbox}
 `;
