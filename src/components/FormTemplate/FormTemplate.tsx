@@ -41,6 +41,9 @@ export const FormInput = ({
   onChange: (e) => void;
   value: string;
   disabled?: boolean;
+  type?: string;
+  onBlur?: () => void;
+  name?: string;
 }) => {
   return (
     <SectionWrapper>

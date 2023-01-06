@@ -6,10 +6,7 @@ import { useNavigate } from "react-router-dom";
 import * as yup from "yup";
 import styled from "styled-components";
 
-// import { PanelBody } from 'components/atoms/Panel/Panel';
-
 import { useFormik } from "formik";
-import { gql } from "@apollo/client";
 
 import { AnimatePresence, motion } from "framer-motion";
 import { PanelBody, PanelWrapper } from "../../components/Panel/Panel";
@@ -23,6 +20,7 @@ import { client } from "src";
 import TextAnimationWrapper from "src/components/TextAnimationWrapper/TextAnimationWrapper";
 import Icon, { ICON_TYPE } from "src/components/icon/icon";
 import { ROUTE_NAMES } from "src/App";
+import { CREATE_NEW_USER_MUTATION } from "src/api/mutations";
 
 const CreateUserSchema = yup.object().shape({
   email: yup.string().required("Email required"),
@@ -52,26 +50,6 @@ const BackWrapper = styled.div`
   }
 `;
 
-const CREATE_NEW_USER_MUTATION = gql`
-  mutation CreateUser(
-    $firstName: String!
-    $lastName: String!
-    $email: String!
-    $password: String!
-  ) {
-    createUser(
-      user: {
-        firstName: $firstName
-        email: $email
-        lastName: $lastName
-        password: $password
-      }
-    ) {
-      status
-    }
-  }
-`;
-
 const CreateNewUserTemplate: FC<IProps> = ({}) => {
   const theme = useTheme();
 
@@ -93,7 +71,7 @@ const CreateNewUserTemplate: FC<IProps> = ({}) => {
 
   const createNewUser = (values: FormValues) => {
     setIsLoading(true);
-    debugger;
+
     client
       .mutate({
         mutation: CREATE_NEW_USER_MUTATION,
@@ -254,17 +232,6 @@ const CreateNewUserTemplate: FC<IProps> = ({}) => {
               label={"Password"}
               onEnterKeyDown={handleSubmitForm}
             />
-
-            {/* <FormPasswordInput
-              value={values.pass_confirm}
-              onBlur={() => validateField("pass_confirm")}
-              onChange={(e) => setFieldValue("pass_confirm", e.target.value)}
-              error={errors.pass_confirm}
-              key={"pass_confirm"}
-              name={"pass_confirm"}
-              label={"Password confirmation"}
-              onEnterKeyDown={handleSubmitForm}
-            /> */}
 
             <Button
               variant="primary"

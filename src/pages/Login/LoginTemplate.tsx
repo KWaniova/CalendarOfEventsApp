@@ -48,6 +48,7 @@ const LOGIN_MUTATION = gql`
       message
       data {
         token
+        id
       }
       status
     }
@@ -85,7 +86,7 @@ const LoginPageTemplate: FC<IProps> = ({}) => {
         },
       })
       .then((result) => {
-        setToken(result.data.login.data.token);
+        setToken(result.data.login.data.token, result.data.login.data.id);
         // console.log(result.data.login.data.token);
         navigate(ROUTE_NAMES.calendar);
       })

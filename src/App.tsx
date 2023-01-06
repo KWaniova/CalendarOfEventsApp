@@ -13,6 +13,9 @@ import { useContext } from "react";
 import GlobalContext from "src/context/GlobalContext";
 import CreateNewUser from "./pages/CreateNewUser/CreateNewUser";
 import Profile from "./pages/Profile/Profile";
+import Connections from "./pages/Connections/Connections";
+import UsersList from "./pages/UsersList/UsersList";
+import ConnectionRequests from "./pages/ConnectionRequests/ConnectionRequests";
 
 type ProtectedRouteProps = {
   children?: JSX.Element;
@@ -36,6 +39,9 @@ export const ROUTE_NAMES = {
   create_new_user: "/create_new_user",
   calendar: "/app/calendar",
   profile: "/app/profile",
+  connections: "/app/connections",
+  connection_requests: "/app/connection_requests",
+  users_list: "/app/users_list",
 };
 
 export default function App() {
@@ -44,33 +50,18 @@ export default function App() {
   return (
     <Router>
       <Routes>
-        <Route path={"/"} element={<Login />} />
-        <Route path={"/create_new_user"} element={<CreateNewUser />} />
+        <Route path={ROUTE_NAMES.login} element={<Login />} />
+        <Route path={ROUTE_NAMES.create_new_user} element={<CreateNewUser />} />
         <Route element={<ProtectedRoute isAllowed={!!auth.token} />}>
-          <Route path={"/app/calendar"} element={<Calendar />} />
-          <Route path={"/app/profile"} element={<Profile />} />
-        </Route>
-        {/* <Route path={"/create_new_user"} element={<CreateNewUser />} /> */}
-        {/* <Route path={"/login/create_new_user"} element={<UpdatePage />} /> */}
-        {/* <Route element={<ProtectedRoute isAllowed={auth.isAuthenticated} />}>
-        <Route path={RoutesEnum.EMPTY} element={null} />
-        <Route
-          path={RoutesEnum.LOGIN_CHANGE_PASSWORD}
-          element={<ChangePasswordForm />}
-        />
-        <Route element={<DefaultLayout />}>
-          <Route path="/patients/*" element={<Patients />} />
-          <Route path="/error-logs/*" element={<ErrorLogsPages />} />
+          <Route path={ROUTE_NAMES.calendar} element={<Calendar />} />
+          <Route path={ROUTE_NAMES.profile} element={<Profile />} />
+          <Route path={ROUTE_NAMES.connections} element={<Connections />} />
           <Route
-            path={RoutesEnum.CHANGE_PASSWORD}
-            element={<ChangePassword />}
+            path={ROUTE_NAMES.connection_requests}
+            element={<ConnectionRequests />}
           />
-          <Route
-            path={`${RoutesEnum.ADMINISTRATORS}/*`}
-            element={<Administrators />}
-          />
+          <Route path={ROUTE_NAMES.users_list} element={<UsersList />} />
         </Route>
-      </Route> */}
       </Routes>
     </Router>
   );

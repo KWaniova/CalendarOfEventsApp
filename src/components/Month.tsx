@@ -8,9 +8,7 @@ import Day from "./Day/Day";
 const GridWrapperRows = styled.div`
   display: grid;
   width: 100%;
-  height: 100%;
-  grid-template-columns: 14% 14% 14% 14% 14% 14% 14%;
-  // grid-gap: 1rem;
+  grid-template-columns: 14.2% 14.2% 14.2% 14.2% 14.2% 14.2% 14.2%;
 `;
 
 export default function Month({ month }) {

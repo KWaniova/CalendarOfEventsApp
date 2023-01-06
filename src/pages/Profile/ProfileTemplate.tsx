@@ -1,17 +1,14 @@
 ////@ts-nocheck
 
+import { ReactNode } from "react";
 import { FC } from "react";
+import Icon, { ICON_TYPE } from "src/components/icon/icon";
 import { useTheme } from "styled-components";
 
 // import { PanelBody } from 'components/atoms/Panel/Panel';
 
-import {
-  PanelBody,
-  PanelHeader,
-  PanelWrapper,
-} from "../../components/Panel/Panel";
+import { PanelBody, PanelWrapper } from "../../components/Panel/Panel";
 import { Heading, Text } from "../../components/Typography/Typography";
-import { DataType } from "./Profile";
 
 export type ProfileDataType = {
   firstName: string;
@@ -24,9 +21,11 @@ export type ProfileDataType = {
 
 interface IProps {
   data: ProfileDataType;
+  close?: () => void;
+  children?: ReactNode;
 }
 
-const ProfileTemplate: FC<IProps> = ({ data }) => {
+const ProfileTemplate: FC<IProps> = ({ data, close, children }) => {
   const theme = useTheme();
 
   return (
@@ -46,12 +45,26 @@ const ProfileTemplate: FC<IProps> = ({ data }) => {
         }}
       >
         <Heading
-          style={{ borderBottom: `1px solid ${theme.colors.grayQuaternary}` }}
+          style={{
+            borderBottom: `1px solid ${theme.colors.grayQuaternary}`,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+          }}
           fontSize={20}
           mb="normal"
           pb="small"
         >
-          Personal Information
+          Connection detail
+          {close && (
+            <Icon
+              style={{ cursor: "pointer" }}
+              onClick={async () => {
+                close();
+              }}
+              type={ICON_TYPE.CLOSE}
+            />
+          )}
         </Heading>
         <Text color="graySecondary" mt="normal">
           First name:
@@ -66,6 +79,7 @@ const ProfileTemplate: FC<IProps> = ({ data }) => {
           E-mail:
         </Text>
         <Text mb="normal">{data.email}</Text>
+        {children}
       </PanelBody>
     </PanelWrapper>
   );

@@ -3,39 +3,62 @@ import { Heading } from "../Typography/Typography";
 import Icon, { ICON_TYPE } from "../icon/icon";
 import { ROUTE_NAMES } from "src/App";
 import { useNavigate } from "react-router-dom";
+import { FlexWrapper } from "../FlexWrapper/FlexWrapper";
+import { useTheme } from "styled-components";
+import Button from "../Button/Button";
+import { useContext } from "react";
+import GlobalContext from "src/context/GlobalContext";
 
 interface Props {
-  children: React.ReactNode;
+  sidebar?: React.ReactNode;
+  breadcrumb?: React.ReactNode;
 }
-const CalendarHeader = ({ children }: Props) => {
+const CalendarHeader = ({ sidebar, breadcrumb }: Props) => {
   const navigate = useNavigate();
+  const { logOut } = useContext(GlobalContext);
+  const theme = useTheme();
 
   return (
-    <HeaderWrapper>
-      <Heading
-        pr={"normal"}
-        fontSize={25}
-        color="graySecondary"
-        fontWeight={300}
-        mr="normal"
+    <FlexWrapper flexDirection={"row"}>
+      <FlexWrapper
         style={{
-          borderRight: "1px solid gray",
-          cursor: "pointer",
-          width: 230,
+          borderRight: sidebar
+            ? `1px solid ${theme.colors.grayTertiary}`
+            : "1px",
         }}
-        onClick={() => navigate(ROUTE_NAMES.calendar)}
       >
-        Calendar app
-      </Heading>
-      {children}
-      <Icon
-        onClick={() => navigate(ROUTE_NAMES.profile)}
-        type={ICON_TYPE.USER_FILLED}
-        fill="brandPrimary"
-        height={40}
-        width={40}
-      />
-    </HeaderWrapper>
+        <HeaderWrapper>
+          <Heading
+            pr={"normal"}
+            fontSize={25}
+            color="graySecondary"
+            fontWeight={300}
+            mr="normal"
+            style={{
+              cursor: "pointer",
+              width: 180,
+            }}
+            onClick={() => navigate(ROUTE_NAMES.calendar)}
+          >
+            Calendar app
+          </Heading>
+        </HeaderWrapper>
+        {sidebar}
+      </FlexWrapper>
+      <HeaderWrapper>
+        <div style={{ flexGrow: 1 }}>{breadcrumb}</div>
+        <Icon
+          onClick={() => navigate(ROUTE_NAMES.profile)}
+          type={ICON_TYPE.USER_FILLED}
+          fill="brandPrimary"
+          height={40}
+          width={40}
+        />
+        <Button onClick={logOut} ml="normal" variant="primary">
+          Log out
+        </Button>
+      </HeaderWrapper>
+    </FlexWrapper>
   );
 };
 

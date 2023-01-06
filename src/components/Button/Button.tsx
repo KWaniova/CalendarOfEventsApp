@@ -12,6 +12,7 @@ type IProps = {
   type?: "button" | "submit" | "reset";
   disabled?: boolean;
   children?: React.ReactNode;
+  style?: any;
 } & LayoutProps &
   SpaceProps;
 

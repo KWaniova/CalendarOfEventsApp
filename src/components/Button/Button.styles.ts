@@ -35,6 +35,10 @@ const ButtonStyled = styled(motion.button)<
         color: "white",
         backgroundColor: "brandPrimary",
       },
+      secondary: {
+        color: "brandPrimary",
+        backgroundColor: "brandTertiary",
+      },
       danger: {
         color: "white",
         backgroundColor: "danger",

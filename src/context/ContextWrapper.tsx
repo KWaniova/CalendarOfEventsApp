@@ -1,10 +1,31 @@
-// @ts-nocheck
+import { useState, useEffect, useReducer } from "react";
+import GlobalContext, { authInitialState, AuthType } from "./GlobalContext";
+import dayjs, { Dayjs } from "dayjs";
+import { EventType } from "src/types/Event";
+import { ApiEventType, GET_MY_EVENTS } from "src/api/queries";
+import { client } from "src";
+import { ApolloQueryResult } from "@apollo/client";
+import { redirect } from "react-router-dom";
+import { LOGOUT } from "src/api/mutations";
 
-import { useState, useEffect, useReducer, useMemo } from "react";
-import GlobalContext, { authInitialState } from "./GlobalContext";
-import dayjs from "dayjs";
+type CreateAction = {
+  type: "push";
+  payload: EventType;
+};
 
-function savedEventsReducer(state, { type, payload }) {
+type UpdateAction = {
+  type: "update";
+  payload: EventType;
+};
+
+type DeleteAction = {
+  type: "delete";
+  payload: EventType;
+};
+
+type ActionType = CreateAction | UpdateAction | DeleteAction;
+
+function savedEventsReducer(state: EventType[], { type, payload }: ActionType) {
   switch (type) {
     case "push":
       return [...state, payload];
@@ -22,50 +43,108 @@ function initEvents() {
   return parsedEvents;
 }
 
-export default function ContextWrapper(props) {
-  const [auth, setAuth] = useState(authInitialState);
-  const [monthIndex, setMonthIndex] = useState(dayjs().month());
-  const [smallCalendarMonth, setSmallCalendarMonth] = useState(null);
-  const [daySelected, setDaySelected] = useState(dayjs());
-  const [showEventModal, setShowEventModal] = useState(false);
-  const [selectedEvent, setSelectedEvent] = useState(null);
-  const [labels, setLabels] = useState([]);
+export default function ContextWrapper(props: any) {
+  const [auth, setAuth] = useState<AuthType>(
+    (localStorage.getItem("auth") &&
+      JSON.parse(localStorage.getItem("auth") ?? "")) ??
+      authInitialState
+  );
+  const [monthIndex, setMonthIndexX] = useState<number>(dayjs().month());
+  const [eventsData, setEventsData] = useState<EventType[]>([]);
+
+  const [daySelected, setDaySelected] = useState<Dayjs>(dayjs());
+  const [showEventModal, setShowEventModalState] = useState<boolean>(false);
+  const [selectedEvent, setSelectedEvent] = useState<EventType | null>(null);
+
+  const [reload, setReload] = useState(false);
   const [savedEvents, dispatchCalEvent] = useReducer(
     savedEventsReducer,
     [],
     initEvents
   );
 
-  const filteredEvents = useMemo(() => {
-    return savedEvents.filter((evt) =>
-      labels
-        .filter((lbl) => lbl.checked)
-        .map((lbl) => lbl.label)
-        .includes(evt.label)
-    );
-  }, [savedEvents, labels]);
-
   useEffect(() => {
-    localStorage.setItem("savedEvents", JSON.stringify(savedEvents));
-  }, [savedEvents]);
+    setMonthIndexX(dayjs().month());
+  }, []);
 
-  useEffect(() => {
-    setLabels((prevLabels) => {
-      return [...new Set(savedEvents.map((evt) => evt.label))].map((label) => {
-        const currentLabel = prevLabels.find((lbl) => lbl.label === label);
-        return {
-          label,
-          checked: currentLabel ? currentLabel.checked : true,
-        };
+  const logOut = () => {
+    debugger;
+    client
+      .mutate({
+        mutation: LOGOUT,
+        variables: {
+          auth: auth.token,
+        },
+      })
+      .then(() => {
+        setAuth(authInitialState);
+        localStorage.removeItem("auth");
+        redirect("/login");
       });
-    });
-  }, [savedEvents]);
+  };
+
+  const setMonthIndex = (index: number) => {
+    setMonthIndexX(index);
+  };
+
+  const setShowEventModal = (value: boolean) => {
+    setShowEventModalState(value);
+  };
+
+  const getEvents = () => {
+    client
+      .query({
+        query: GET_MY_EVENTS,
+        variables: {
+          auth: auth.token,
+          from: dayjs(new Date(dayjs().year(), monthIndex)).format(
+            "YYYY-MM-DDTHH:mm"
+          ),
+          to: dayjs(new Date(dayjs().year(), monthIndex + 1)).format(
+            "YYYY-MM-DDTHH:mm"
+          ),
+        },
+      })
+      .then(
+        (
+          result: ApolloQueryResult<{
+            myEvents: ApiEventType[];
+          }>
+        ) => {
+          const events: EventType[] = result.data?.myEvents?.map((item) => ({
+            ...item,
+            title: item.title,
+            description: item.description,
+            from: dayjs(item.startDate).format("YYYY-MM-DDTHH:mm"),
+            to: dayjs(item.endDate).format("YYYY-MM-DDTHH:mm"),
+          }));
+
+          setEventsData(events);
+        }
+      )
+      .catch((err) => {
+        console.log("GET EVENTS ERR: ", err);
+      });
+  };
 
   useEffect(() => {
-    if (smallCalendarMonth !== null) {
-      setMonthIndex(smallCalendarMonth);
+    if (reload) {
+      setReload(false);
+      getEvents();
     }
-  }, [smallCalendarMonth]);
+  }, [reload]);
+
+  useEffect(() => {
+    if (auth.token) {
+      getEvents();
+    }
+  }, [monthIndex, auth.token]);
+
+  // useEffect(() => {
+  //   if (smallCalendarMonth !== null) {
+  //     setMonthIndex(smallCalendarMonth);
+  //   }
+  // }, [smallCalendarMonth]);
 
   useEffect(() => {
     if (!showEventModal) {
@@ -73,20 +152,22 @@ export default function ContextWrapper(props) {
     }
   }, [showEventModal]);
 
-  function updateLabel(label) {
-    setLabels(labels.map((lbl) => (lbl.label === label.label ? label : lbl)));
-  }
+  // function updateLabel(label) {
+  //   setLabels(labels.map((lbl) => (lbl.label === label.label ? label : lbl)));
+  // }
 
-  const setToken = (token: string) => {
-    setAuth((state) => ({ ...state, token: token }));
+  const setToken = (token: string, userId: string) => {
+    setAuth((state) => ({ ...state, token: token, userId: userId }));
+    localStorage.setItem("auth", JSON.stringify({ token, userId }));
   };
   return (
     <GlobalContext.Provider
       value={{
+        setReload,
         monthIndex,
         setMonthIndex,
-        smallCalendarMonth,
-        setSmallCalendarMonth,
+        // smallCalendarMonth,
+        // setSmallCalendarMonth,
         daySelected,
         setDaySelected,
         showEventModal,
@@ -95,16 +176,27 @@ export default function ContextWrapper(props) {
         selectedEvent,
         setSelectedEvent,
         savedEvents,
-        setLabels,
-        labels,
-        updateLabel,
-        filteredEvents,
+        // setLabels,
+        // labels,
+        // updateLabel,
+        filteredEvents: eventsData,
         auth,
         setAuth,
         setToken,
+        logOut,
       }}
     >
-      {props.children}
+      {props?.children}
     </GlobalContext.Provider>
   );
 }
+
+/*
+TODO:
+przi create event wracac id
+ulozyc do local state
+dorobic create eventy 
+dorobic edit profile
+potym connections
+a kichac uz na to!
+*/

@@ -1,26 +1,15 @@
-////@ts-nocheck
+import React, { useContext } from "react";
 
-import React, { useContext, useEffect, useState } from "react";
-import { HeightProps, height } from "styled-system";
-import styled, { useTheme } from "styled-components";
-
-import { AnimatePresence, motion } from "framer-motion";
-import ProfileTemplate, { ProfileDataType } from "./ProfileTemplate";
-import dayjs from "dayjs";
-import Button from "src/components/Button/Button";
-import CalendarHeader from "src/components/CalendarHeader/CalendarHeader";
-import Icon from "src/components/icon";
-import { ICON_TYPE } from "src/components/icon/icon";
-import { Heading } from "src/components/Typography/Typography";
-import { FlexWrapper } from "src/components/FlexWrapper/FlexWrapper";
+import { ProfileDataType } from "./ProfileTemplate";
 import { gql, useQuery } from "@apollo/client";
 import GlobalContext from "src/context/GlobalContext";
-import { PanelBody } from "src/components/Panel/Panel";
-
-const Wrapper = styled.div<HeightProps>`
-  width: 100vw;
-  height: 100vh;
-`;
+import ProfileLayout from "../../components/ProfileLayout/ProfileLayout";
+import { FlexWrapper } from "src/components/FlexWrapper/FlexWrapper";
+import { theme } from "src/styles/theme";
+import { Text } from "src/components/Typography/Typography";
+import Icon, { ICON_TYPE } from "src/components/icon/icon";
+import { useModalContext } from "src/context/ModalContext/Modal";
+import EditUserProfile from "../UserProfile/EditUserProfile";
 
 const ME_QUERY = gql`
   query Me($auth: String!) {
@@ -42,87 +31,107 @@ const Profile: React.FC = () => {
   const { data, loading, error } = useQuery<DataType>(ME_QUERY, {
     variables: { auth: auth.token },
   });
-  const [pageHeight, setPageHeight] = useState(900);
-  const theme = useTheme();
 
-  useEffect(() => {
-    setPageHeight(window.innerHeight);
-  }, []);
-
-  if (loading) return <>Loading...</>;
+  const { show } = useModalContext();
+  if (loading)
+    return (
+      <ProfileLayout title="Users List">
+        <div />
+      </ProfileLayout>
+    );
   if (error) return <pre>{error.message}</pre>;
   if (!data) return <pre>{"No data"}</pre>;
 
-  const calendarHeader = (
-    <CalendarHeader>
-      <Heading style={{ flexGrow: 1 }} fontSize={25}>
-        User profile
-      </Heading>
-    </CalendarHeader>
-  );
+  const showEditModal = () => {
+    debugger;
+    auth.userId &&
+      show(
+        <EditUserProfile
+          userID={auth.userId}
+          first_name={data.me.firstName}
+          last_name={data.me.lastName}
+          email={data.me.email}
+        />
+      );
+    console.log("show edit modal");
+  };
   return (
-    <Wrapper height={pageHeight}>
-      {calendarHeader}
-      <FlexWrapper flexDirection={"row"}>
-        <ProfileTemplate data={data.me} />
-        <div style={{ width: "100%" }}>
-          <PanelBody
-            flexDirection={"column"}
-            noRadius
-            width={"100%"}
-            ml="normal"
-            mr="normal"
-            pt={20}
-            pr={50}
-            pl={50}
+    <ProfileLayout title="User profile">
+      <FlexWrapper style={{ width: "100%" }} flexDirection={"column"}>
+        <FlexWrapper
+          style={{
+            width: "100%",
+            height: 180,
+            alignItems: "flex-end",
+            backgroundColor: theme.colors.brandPrimary,
+            padding: theme.space.small,
+          }}
+        >
+          <Icon
+            onClick={showEditModal}
+            type={ICON_TYPE.EDIT}
+            fill="white"
+            height={40}
+            width={40}
+          />
+        </FlexWrapper>
+        <FlexWrapper
+          style={{
+            flexGrow: 1,
+            width: "100%",
+            backgroundColor: theme.colors.white,
+            alignItems: "center",
+          }}
+        >
+          <div
             style={{
+              border: `5px solid ${theme.colors.brandSecondary}`,
+              marginTop: -90,
+              height: 180,
+              width: 180,
               display: "flex",
-              borderRadius: 10,
-              border: `1px solid ${theme.colors.grayQuaternary}`,
+              alignItems: "center",
+              justifyContent: "center",
+              borderRadius: 100,
+              backgroundColor: "white",
             }}
           >
-            <Heading
+            <div
               style={{
-                borderBottom: `1px solid ${theme.colors.grayQuaternary}`,
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                height: 170,
+                width: 170,
+                fontSize: 60,
+                fontWeight: 700,
+                color: theme.colors.brandPrimary,
+                borderRadius: 100,
+                backgroundColor: theme.colors.brandQuaternary,
               }}
-              fontSize={20}
-              mb="normal"
-              pb="small"
             >
-              Connections
-            </Heading>
-          </PanelBody>
+              {data.me.firstName[0]}
+              {data.me.lastName[0]}
+            </div>
+          </div>
+          <FlexWrapper style={{ width: "100%", paddingLeft: 50 }}>
+            <Text fontSize={22} color="graySecondary" mt="normal">
+              Name:
+            </Text>
+            <Text fontSize={22} mb="normal">
+              {data.me.firstName} {data.me.lastName}{" "}
+            </Text>
 
-          <PanelBody
-            flexDirection={"column"}
-            noRadius
-            width={"100%"}
-            ml="normal"
-            mt="normal"
-            mr="normal"
-            pt={20}
-            pr={50}
-            pl={50}
-            style={{
-              display: "flex",
-              borderRadius: 10,
-              border: `1px solid ${theme.colors.grayQuaternary}`,
-            }}
-          >
-            <Heading
-              style={{
-                borderBottom: `1px solid ${theme.colors.grayQuaternary}`,
-              }}
-              fontSize={20}
-              mb="normal"
-              pb="small"
-            >
-              Connection requests
-            </Heading>
-          </PanelBody>
-        </div>
+            <Text fontSize={22} color="graySecondary" mt="normal">
+              E-mail:
+            </Text>
+            <Text fontSize={22} mb="normal">
+              {data.me.email}
+            </Text>
+          </FlexWrapper>
+        </FlexWrapper>
       </FlexWrapper>
-    </Wrapper>
+    </ProfileLayout>
   );
 };
 
