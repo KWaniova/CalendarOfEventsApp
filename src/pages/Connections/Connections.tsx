@@ -84,6 +84,9 @@ const Connections: React.FC = () => {
           <div style={{ overflow: "auto", padding: 10 }}>
             {data.connections.connections.map((item) => (
               <ConnectionItemWrapper
+                active={item.userId === userData?.userID}
+                whileHover={{ scale: 1.005 }}
+                whileTap={{ scale: 0.98 }}
                 onClick={() => showConnectionProfile(item.userId, item.id)}
               >
                 <Icon mr={10} type={ICON_TYPE.USER} />

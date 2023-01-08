@@ -1,7 +1,9 @@
 import React, { useContext } from "react";
+import { useQuery } from "@apollo/client";
+import styled from "styled-components";
+import { motion } from "framer-motion";
 
 import { ProfileDataType } from "./ProfileTemplate";
-import { gql, useQuery } from "@apollo/client";
 import GlobalContext from "src/context/GlobalContext";
 import ProfileLayout from "../../components/ProfileLayout/ProfileLayout";
 import { FlexWrapper } from "src/components/FlexWrapper/FlexWrapper";
@@ -11,15 +13,32 @@ import Icon, { ICON_TYPE } from "src/components/icon/icon";
 import { useModalContext } from "src/context/ModalContext/Modal";
 import EditUserProfile from "../UserProfile/EditUserProfile";
 
-const ME_QUERY = gql`
-  query Me($auth: String!) {
-    me(auth: $auth) {
-      id
-      firstName
-      lastName
-      email
-    }
-  }
+import { ME_QUERY } from "src/api/queries";
+
+const AvatarWrapper = styled(motion.div)`
+  border: 5px solid ${theme.colors.brandSecondary};
+  height: 180px;
+  width: 180px;
+  border-radius: 50%;
+  background-color: ${theme.colors.white};
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0 auto;
+  margin-bottom: ${theme.space.normal};
+  margin-top: -90px;
+`;
+
+const InnerAvatarWrapper = styled(AvatarWrapper)`
+  border: 0px solid ${theme.colors.brandSecondary};
+  height: 170px;
+  width: 170px;
+  background-color: ${theme.colors.white};
+  font-size: 60px;
+  font-weight: 700;
+  margin: 0 auto;
+  color: ${theme.colors.brandPrimary};
+  backgroundcolor: ${theme.colors.brandQuaternary};
 `;
 
 export type DataType = {
@@ -43,7 +62,6 @@ const Profile: React.FC = () => {
   if (!data) return <pre>{"No data"}</pre>;
 
   const showEditModal = () => {
-    debugger;
     auth.userId &&
       show(
         <EditUserProfile
@@ -83,49 +101,24 @@ const Profile: React.FC = () => {
             alignItems: "center",
           }}
         >
-          <div
-            style={{
-              border: `5px solid ${theme.colors.brandSecondary}`,
-              marginTop: -90,
-              height: 180,
-              width: 180,
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              borderRadius: 100,
-              backgroundColor: "white",
-            }}
-          >
-            <div
-              style={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                height: 170,
-                width: 170,
-                fontSize: 60,
-                fontWeight: 700,
-                color: theme.colors.brandPrimary,
-                borderRadius: 100,
-                backgroundColor: theme.colors.brandQuaternary,
-              }}
-            >
+          <AvatarWrapper whileHover={{ scale: 1.03 }}>
+            <InnerAvatarWrapper>
               {data.me.firstName[0]}
               {data.me.lastName[0]}
-            </div>
-          </div>
+            </InnerAvatarWrapper>
+          </AvatarWrapper>
           <FlexWrapper style={{ width: "100%", paddingLeft: 50 }}>
-            <Text fontSize={22} color="graySecondary" mt="normal">
+            <Text fontSize={18} color="graySecondary" mt="normal">
               Name:
             </Text>
-            <Text fontSize={22} mb="normal">
+            <Text fontSize={18} mb="normal">
               {data.me.firstName} {data.me.lastName}{" "}
             </Text>
 
-            <Text fontSize={22} color="graySecondary" mt="normal">
+            <Text fontSize={18} color="graySecondary" mt="normal">
               E-mail:
             </Text>
-            <Text fontSize={22} mb="normal">
+            <Text fontSize={18} mb="normal">
               {data.me.email}
             </Text>
           </FlexWrapper>

@@ -99,6 +99,18 @@ export const GET_USER = gql`
   }
 `;
 
+export const ME_QUERY = gql`
+  query Me($auth: String!) {
+    me(auth: $auth) {
+      id
+      firstName
+      lastName
+      email
+      createdAt
+    }
+  }
+`;
+
 export const NOT_CONNECTED_USERS = gql`
   query NotConnectedUsers($auth: String!) {
     notConnectedUsers(auth: $auth) {

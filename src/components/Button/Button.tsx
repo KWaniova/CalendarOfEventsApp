@@ -19,7 +19,7 @@ type IProps = {
 const Button: FC<IProps> = ({ children, ...props }) => {
   return (
     <ButtonStyled
-      whileHover={{ scale: !props.disabled ? 1.006 : 1 }}
+      whileHover={{ scale: !props.disabled ? 1.008 : 1 }}
       whileTap={{ scale: !props.disabled ? 0.98 : 1 }}
       {...props}
     >

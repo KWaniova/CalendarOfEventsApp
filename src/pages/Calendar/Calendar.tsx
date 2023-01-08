@@ -1,79 +1,50 @@
-import { useState, useContext, useEffect } from "react";
-
-import CalendarHeader from "src/components/CalendarHeader/CalendarHeader";
-import { getMonth } from "src/utils/getMonth";
-
-import GlobalContext from "src/context/GlobalContext";
-import Month from "src/components/Month";
+import styled, { useTheme } from "styled-components";
 import dayjs from "dayjs";
+
+import Month from "src/components/Month";
 import Icon from "src/components/icon";
 import { ICON_TYPE } from "src/components/icon/icon";
 import { Heading, Text } from "src/components/Typography/Typography";
-import { useTheme } from "styled-components";
-import styled from "styled-components";
+import { FlexWrapper } from "src/components/FlexWrapper/FlexWrapper";
+import CalendarHeader from "src/components/CalendarHeader/CalendarHeader";
 
-export const FooterWrapper = styled.div`
-  display: flex;
-  align-items: center;
-  height: 40px;
-  border-top: 1px solid ${({ theme }) => theme.colors.grayQuaternary};
-  background-color: ${({ theme }) => theme.colors.brandQuaternary};
-`;
+import useCalendar from "./useCalendar";
 
 export default function Calendar() {
   const theme = useTheme();
-  const [currenMonth, setCurrentMonth] = useState(getMonth());
-  const { monthIndex, setMonthIndex, setReload } = useContext(GlobalContext);
 
-  useEffect(() => {
-    setReload(true);
-  }, []);
-
-  useEffect(() => {
-    setCurrentMonth(getMonth(monthIndex));
-  }, [monthIndex]);
-
-  function handlePrevMonth() {
-    debugger;
-    setMonthIndex((monthIndex - 1) % 12);
-  }
-  function handleNextMonth() {
-    setMonthIndex((monthIndex + 1) % 12);
-  }
-  function handleReset() {
-    setMonthIndex(
-      monthIndex === dayjs().month() ? monthIndex : dayjs().month()
-    );
-  }
-  const calendarHeader = <CalendarHeader />;
+  const {
+    handleNextMonth,
+    handlePrevMonth,
+    handleReset,
+    currenMonth,
+    monthIndex,
+  } = useCalendar();
 
   return (
-    <div
+    <FlexWrapper
+      flexDirection="column"
       style={{
         height: "100vh",
         width: "100vw",
         overflow: "hidden",
-        display: "flex",
-        flexDirection: "column",
       }}
     >
-      {calendarHeader}
-      <div
+      <CalendarHeader />
+      <FlexWrapper
         style={{
           width: "100%",
           flexGrow: 1,
           overflow: "scroll",
-          display: "flex",
         }}
       >
         <Month month={currenMonth} />
-      </div>
+      </FlexWrapper>
       <FooterWrapper>
-        <div
+        <FlexWrapper
+          alignItems="center"
+          justifyContent="center"
           style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
             width: 130,
             height: "100%",
             cursor: "pointer",
@@ -84,7 +55,7 @@ export default function Calendar() {
           <Text fontSize={16} color={"white"}>
             Current month
           </Text>
-        </div>
+        </FlexWrapper>
         <Icon
           onClick={handlePrevMonth}
           type={ICON_TYPE.ARROW_LEFT}
@@ -100,7 +71,59 @@ export default function Calendar() {
         <Heading fontSize={25}>
           {dayjs(new Date(dayjs().year(), monthIndex)).format("MMMM YYYY")}
         </Heading>
+        <FlexWrapper
+          flexDirection={"row"}
+          style={{
+            flexGrow: 1,
+            justifyContent: "flex-end",
+            alignItems: "center",
+          }}
+        >
+          <Line />
+          <Text ml="normal" mr="normal" color="graySecondary">
+            Friend event
+          </Text>
+          <Line style={{ backgroundColor: theme.colors.emotionsGreen }} />
+          <Text ml="normal" mr="normal" color="graySecondary">
+            My event
+          </Text>
+
+          <Circle />
+          <Text ml="normal" mr="normal" color="graySecondary">
+            Private
+          </Text>
+          <Circle
+            style={{
+              backgroundColor: theme.colors.brandQuaternary,
+            }}
+          />
+          <Text ml="normal" mr="normal" color="graySecondary">
+            Public
+          </Text>
+        </FlexWrapper>
       </FooterWrapper>
-    </div>
+    </FlexWrapper>
   );
 }
+
+const Line = styled.div`
+  width: 20px;
+  height: 5px;
+  border-radius: 10px;
+  background-color: ${({ theme }) => theme.colors.brandPrimary};
+`;
+
+const Circle = styled.div`
+  width: 10px;
+  height: 10px;
+  border-radius: 50px;
+  background-color: ${({ theme }) => theme.colors.companionSecondary};
+`;
+
+export const FooterWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  height: 40px;
+  border-top: 1px solid ${({ theme }) => theme.colors.grayQuaternary};
+  background-color: ${({ theme }) => theme.colors.brandQuaternary};
+`;

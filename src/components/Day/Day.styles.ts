@@ -1,5 +1,6 @@
 // @ts-nocheck
 
+import { motion } from "framer-motion";
 import styled, { css } from "styled-components";
 import { color, ColorProps } from "styled-system";
 
@@ -10,7 +11,11 @@ export const DayWrapper = styled.div`
   flex: 1;
   min-height: 100px;
   align-items: center;
+  &:hover {
+    border: 2px solid ${({ theme }) => theme.colors.brandTertiary};
+  }
   border: 1px solid ${({ theme }) => theme.colors.grayQuaternary};
+  border-radius: 5px;
 `;
 
 export const ClickableWrapper = styled.div`
@@ -23,7 +28,11 @@ export const ClickableWrapper = styled.div`
   overflow: scroll;
 `;
 
-export const DayDateWrapper = styled.div`
+type DayWrapperProps = {
+  active: boolean;
+};
+
+export const DayDateWrapper = styled.div<DayWrapperProps>`
   padding: 5px;
   ${({ active }) =>
     active &&
@@ -38,9 +47,8 @@ export const DayDateWrapper = styled.div`
 interface IProps {
   friendEvent: boolean;
 }
-export const DayEventWrapper = styled.div<IProps & ColorProps>`
+export const DayEventWrapper = styled(motion.button)<IProps & ColorProps>`
   display: flex;
-  // justify-content: center;
   padding: 3px;
   width: 80%;
   max-width: 80%;
@@ -52,14 +60,15 @@ export const DayEventWrapper = styled.div<IProps & ColorProps>`
   text-overflow: ellipsis;
   white-space: nowrap;
   margin: 5px;
+  cursor: pointer;
   font-size: 12px;
   border: 2px solid ${({ theme }) => theme.colors.emotionsGreen};
 
   ${({ friendEvent }) =>
     friendEvent &&
     css`
-      background-color: ${({ theme }) => theme.colors.brandQuaternary};
-      border: 2px solid ${({ theme }) => theme.colors.emotionsBlue};
+      background-color: ${({ theme }) => theme.colors.emotionsNavy};
+      border: 2px solid ${({ theme }) => theme.colors.brandPrimary};
     `}
 
   ${color}

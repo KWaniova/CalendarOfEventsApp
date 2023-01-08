@@ -105,7 +105,7 @@ const CreateNewUserTemplate: FC<IProps> = ({}) => {
   const back = (
     <BackWrapper onClick={() => navigate(ROUTE_NAMES.login)}>
       <Icon mb={20} type={ICON_TYPE.ARROW_LEFT} />
-      <Text> back to login</Text>
+      <Text>Back to login</Text>
     </BackWrapper>
   );
 

@@ -7,6 +7,7 @@ import { client } from "src";
 import { ApiUserType, GET_USER } from "src/api/queries";
 import EventFormTemplate, { EventFormData } from "./EventFormTemplate";
 import useEventActions from "./useEventActions";
+import dayjs from "dayjs";
 
 export default function CreateEventModal() {
   const {
@@ -66,10 +67,10 @@ export default function CreateEventModal() {
     description: selectedEvent ? selectedEvent.description : "",
     from: selectedEvent
       ? selectedEvent.from
-      : daySelected?.format("YYYY-MM-DD-HH-mm") || "",
+      : dayjs(daySelected)?.format("YYYY-MM-DDTHH:mm") || "",
     to: selectedEvent
       ? selectedEvent.to
-      : daySelected?.format("YYYY-MM-DD-HH-mm") || "",
+      : dayjs(daySelected)?.format("YYYY-MM-DDT23:59") || "",
     type: selectedEvent ? selectedEvent.type : "PRIVATE",
   };
 
@@ -81,7 +82,7 @@ export default function CreateEventModal() {
         setShowEventModal={setShowEventModal}
         onSubmit={onSubmit}
         initialValues={initialValues}
-        title={"Add event"}
+        title={"Create an event"}
       />
     );
   } else if (isMyEvent) {

@@ -1,4 +1,7 @@
 import React, { useContext, useState } from "react";
+import styled, { useTheme } from "styled-components";
+import { motion } from "framer-motion";
+import { client } from "src";
 
 import { useQuery } from "@apollo/client";
 import GlobalContext from "src/context/GlobalContext";
@@ -8,22 +11,28 @@ import { FlexWrapper } from "src/components/FlexWrapper/FlexWrapper";
 import Icon from "src/components/icon";
 import { ICON_TYPE } from "src/components/icon/icon";
 import { Heading, Text } from "src/components/Typography/Typography";
-import styled, { useTheme } from "styled-components";
 import { User } from "src/types/User";
 import Button from "src/components/Button/Button";
 import UserDataPanel from "src/components/UserDataPanel/UserDataPanel";
-import { client } from "src";
 import { ADD_CONNECTION } from "src/api/mutations";
 
-export const ConnectionItemWrapper = styled.div`
+type Props = {
+  active?: boolean;
+};
+export const ConnectionItemWrapper = styled(motion.div)<Props>`
   display: flex;
   padding: ${({ theme }) => theme.space.normal};
   border-bottom: 1px solid ${({ theme }) => theme.colors.brandTertiary};
-  // border-radius: 3px;
   cursor: pointer;
   &:hover {
     background-color: ${({ theme }) => theme.colors.brandQuaternary};
   }
+
+  ${({ theme, active }) =>
+    active &&
+    `
+    background-color: ${theme.colors.brandQuaternary};
+  `}
 `;
 
 export type DataType = {
@@ -103,6 +112,9 @@ const UsersList: React.FC = () => {
           <div style={{ overflow: "auto", padding: 10 }}>
             {data?.getNotConnectedUsers?.map((item) => (
               <ConnectionItemWrapper
+                active={item.id === userID}
+                whileHover={{ scale: 1.005 }}
+                whileTap={{ scale: 0.98 }}
                 onClick={() => showConnectionProfile(item.id)}
               >
                 <Icon mr={10} type={ICON_TYPE.USER} />

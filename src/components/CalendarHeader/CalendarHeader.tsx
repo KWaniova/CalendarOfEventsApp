@@ -1,4 +1,4 @@
-import { HeaderWrapper } from "./CalendarHeader.styles";
+import { HeaderTitleWrapper, HeaderWrapper } from "./CalendarHeader.styles";
 import { Heading } from "../Typography/Typography";
 import Icon, { ICON_TYPE } from "../icon/icon";
 import { ROUTE_NAMES } from "src/App";
@@ -17,7 +17,6 @@ const CalendarHeader = ({ sidebar, breadcrumb }: Props) => {
   const navigate = useNavigate();
   const { logOut } = useContext(GlobalContext);
   const theme = useTheme();
-
   return (
     <FlexWrapper flexDirection={"row"}>
       <FlexWrapper
@@ -45,7 +44,7 @@ const CalendarHeader = ({ sidebar, breadcrumb }: Props) => {
         </HeaderWrapper>
         {sidebar}
       </FlexWrapper>
-      <HeaderWrapper>
+      <HeaderTitleWrapper>
         <div style={{ flexGrow: 1 }}>{breadcrumb}</div>
         <Icon
           onClick={() => navigate(ROUTE_NAMES.profile)}
@@ -57,7 +56,7 @@ const CalendarHeader = ({ sidebar, breadcrumb }: Props) => {
         <Button onClick={logOut} ml="normal" variant="primary">
           Log out
         </Button>
-      </HeaderWrapper>
+      </HeaderTitleWrapper>
     </FlexWrapper>
   );
 };

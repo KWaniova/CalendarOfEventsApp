@@ -104,6 +104,9 @@ const ConnectionRequests: React.FC = () => {
               {connReq &&
                 connReq?.connectionRequests.connections?.map((item) => (
                   <ConnectionItemWrapper
+                    active={item.userId === userPanel?.userID}
+                    whileHover={{ scale: 1.005 }}
+                    whileTap={{ scale: 0.98 }}
                     onClick={() =>
                       showConnectionProfile(item.userId, "req", item.id)
                     }
@@ -135,6 +138,9 @@ const ConnectionRequests: React.FC = () => {
               {connSent &&
                 connSent?.connectionRequestsSent.connections?.map((item) => (
                   <ConnectionItemWrapper
+                    active={item.userId === userPanel?.userID}
+                    whileHover={{ scale: 1.005 }}
+                    whileTap={{ scale: 0.98 }}
                     onClick={() =>
                       showConnectionProfile(item.userId, "req_sent", item.id)
                     }

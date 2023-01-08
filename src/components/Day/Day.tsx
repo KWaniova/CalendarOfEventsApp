@@ -1,6 +1,4 @@
-// @ts-nocheck
-
-import dayjs from "dayjs";
+import dayjs, { Dayjs } from "dayjs";
 import { useContext, useState, useEffect } from "react";
 import { useModalContext } from "src/context/ModalContext/Modal";
 import GlobalContext from "../../context/GlobalContext";
@@ -16,8 +14,8 @@ import {
 
 import { EventType } from "src/types/Event";
 
-export default function Day({ day, rowIdx }: { day: string; rowIdx: number }) {
-  const [dayEvents, setDayEvents] = useState([]);
+export default function Day({ day, rowIdx }: { day: Dayjs; rowIdx: number }) {
+  const [dayEvents, setDayEvents] = useState<EventType[]>([]);
   const {
     setDaySelected,
     setShowEventModal,
@@ -56,13 +54,13 @@ export default function Day({ day, rowIdx }: { day: string; rowIdx: number }) {
           show(<CreateEventModal />);
         }}
       >
-        {dayEvents.map((evt, idx) => (
+        {dayEvents?.map((evt, idx) => (
           <DayEventWrapper
+            whileHover={{ scale: 1.03 }}
+            whileTap={{ scale: 0.98 }}
             friendEvent={myID !== evt.userId}
             key={idx}
-            bg={
-              evt.type === "PRIVATE" ? "companionQuaternary" : "brandQuaternary"
-            }
+            bg={evt.type === "PRIVATE" ? "companionQuaternary" : "white"}
             onClick={() => {
               setSelectedEvent(evt);
             }}
