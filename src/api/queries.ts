@@ -3,8 +3,10 @@ import { gql } from "@apollo/client";
 export type ApiEventType = {
   title: string;
   description: string;
-  startDate: string;
-  endDate: string;
+  dateRange: {
+    startDate: string;
+    endDate: string;
+  };
   type: "PRIVATE" | "PUBLIC";
   id: string;
   userId: string;
@@ -16,8 +18,10 @@ export const GET_MY_EVENTS = gql`
       title
       description
       type
-      startDate
-      endDate
+      dateRange {
+        startDate
+        endDate
+      }
       id
       userId
     }

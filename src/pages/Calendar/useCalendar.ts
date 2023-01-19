@@ -3,6 +3,7 @@ import { useState, useContext, useEffect } from "react";
 import GlobalContext from "src/context/GlobalContext";
 import { getMonth } from "src/utils/getMonth";
 
+//calendar helper hook - gets state from calendar context
 export default function useCalendar() {
   const [currenMonth, setCurrentMonth] = useState(getMonth());
   const { monthIndex, setMonthIndex, setReload } = useContext(GlobalContext);

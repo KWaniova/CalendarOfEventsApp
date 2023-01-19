@@ -44,6 +44,7 @@ export const ROUTE_NAMES = {
   users_list: "/app/users_list",
 };
 
+//PATTERN: application controller
 export default function App() {
   const { auth } = useContext(GlobalContext);
 

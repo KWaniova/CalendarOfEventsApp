@@ -10,9 +10,11 @@ import CalendarHeader from "src/components/CalendarHeader/CalendarHeader";
 
 import useCalendar from "./useCalendar";
 
+//PATTERN: template view
 export default function Calendar() {
   const theme = useTheme();
 
+  //Pattern: calendar helper
   const {
     handleNextMonth,
     handlePrevMonth,
@@ -38,6 +40,7 @@ export default function Calendar() {
           overflow: "scroll",
         }}
       >
+        {/*shows current month - depends on actual state from context*/}
         <Month month={currenMonth} />
       </FlexWrapper>
       <FooterWrapper>

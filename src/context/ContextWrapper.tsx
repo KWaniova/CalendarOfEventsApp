@@ -68,7 +68,6 @@ export default function ContextWrapper(props: any) {
   }, []);
 
   const logOut = () => {
-    debugger;
     client
       .mutate({
         mutation: LOGOUT,
@@ -97,7 +96,7 @@ export default function ContextWrapper(props: any) {
         query: GET_MY_EVENTS,
         variables: {
           auth: auth.token,
-          from: dayjs(new Date(dayjs().year(), monthIndex)).format(
+          from: dayjs(new Date(dayjs().year(), monthIndex - 1)).format(
             "YYYY-MM-DDTHH:mm"
           ),
           to: dayjs(new Date(dayjs().year(), monthIndex + 1)).format(
@@ -115,8 +114,8 @@ export default function ContextWrapper(props: any) {
             ...item,
             title: item.title,
             description: item.description,
-            from: dayjs(item.startDate).format("YYYY-MM-DDTHH:mm"),
-            to: dayjs(item.endDate).format("YYYY-MM-DDTHH:mm"),
+            from: dayjs(item.dateRange.startDate).format("YYYY-MM-DDTHH:mm"),
+            to: dayjs(item.dateRange.endDate).format("YYYY-MM-DDTHH:mm"),
           }));
 
           setEventsData(events);
@@ -140,21 +139,11 @@ export default function ContextWrapper(props: any) {
     }
   }, [monthIndex, auth.token]);
 
-  // useEffect(() => {
-  //   if (smallCalendarMonth !== null) {
-  //     setMonthIndex(smallCalendarMonth);
-  //   }
-  // }, [smallCalendarMonth]);
-
   useEffect(() => {
     if (!showEventModal) {
       setSelectedEvent(null);
     }
   }, [showEventModal]);
-
-  // function updateLabel(label) {
-  //   setLabels(labels.map((lbl) => (lbl.label === label.label ? label : lbl)));
-  // }
 
   const setToken = (token: string, userId: string) => {
     setAuth((state) => ({ ...state, token: token, userId: userId }));
@@ -166,8 +155,6 @@ export default function ContextWrapper(props: any) {
         setReload,
         monthIndex,
         setMonthIndex,
-        // smallCalendarMonth,
-        // setSmallCalendarMonth,
         daySelected,
         setDaySelected,
         showEventModal,
@@ -176,9 +163,6 @@ export default function ContextWrapper(props: any) {
         selectedEvent,
         setSelectedEvent,
         savedEvents,
-        // setLabels,
-        // labels,
-        // updateLabel,
         filteredEvents: eventsData,
         auth,
         setAuth,
@@ -190,13 +174,3 @@ export default function ContextWrapper(props: any) {
     </GlobalContext.Provider>
   );
 }
-
-/*
-TODO:
-przi create event wracac id
-ulozyc do local state
-dorobic create eventy 
-dorobic edit profile
-potym connections
-a kichac uz na to!
-*/

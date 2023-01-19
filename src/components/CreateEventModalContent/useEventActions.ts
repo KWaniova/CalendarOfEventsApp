@@ -6,7 +6,6 @@ import {
   UPDATE_EVENT_MUTATION,
   DELETE_EVENT_MUTATION,
 } from "src/api/mutations";
-import { GET_MY_EVENTS } from "src/api/queries";
 import GlobalContext from "src/context/GlobalContext";
 import { EventFormData } from "./EventFormTemplate";
 
@@ -29,8 +28,7 @@ export default function useEventActions({
             event: {
               title,
               description,
-              startDate: `${from}`,
-              endDate: `${to}`,
+              dateRange: { startDate: `${from}`, endDate: `${to}` },
             },
           },
         })
@@ -48,8 +46,7 @@ export default function useEventActions({
             event: {
               title,
               description,
-              startDate: `${from}`,
-              endDate: `${to}`,
+              dateRange: { startDate: `${from}`, endDate: `${to}` },
             },
           },
         })
@@ -73,15 +70,12 @@ export default function useEventActions({
             type: type,
             title,
             description,
-            startDate: `${from}`,
-            endDate: `${to}`,
+            dateRange: {
+              startDate: `${from}`,
+              endDate: `${to}`,
+            },
           },
         },
-        refetchQueries: [
-          {
-            query: GET_MY_EVENTS,
-          },
-        ],
       })
       .then((result) => {
         onSuccess();

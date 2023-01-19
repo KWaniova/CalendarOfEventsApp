@@ -29,7 +29,6 @@ const CreateUserSchema = yup.object().shape({
   pass: yup.string().required("Password required"),
 });
 
-//TODO: refactor
 interface IProps {}
 
 interface FormValues {

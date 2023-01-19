@@ -9,6 +9,7 @@ const GridWrapperRows = styled.div`
   display: grid;
   width: 100%;
   grid-template-columns: 14.2% 14.2% 14.2% 14.2% 14.2% 14.2% 14.2%;
+  height: -webkit-fill-available;
 `;
 
 export default function Month({ month }) {
