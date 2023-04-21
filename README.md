@@ -2,7 +2,9 @@ React calendar application - includes examples of advanced design patterns (M. F
 
 The application uses the apollo client to communicate with the GraphQL server.
 
-Styled components - for styling
+Styled components - for styling.
+
+Uses server written in Python https://github.com/KWaniova/CalendarAppServer.
 
 # Getting Started with Create React App
 
