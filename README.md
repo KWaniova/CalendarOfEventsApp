@@ -1,6 +1,6 @@
-React calendar application - contains examples of advanced design patterns (M. Fowler)
+React calendar application - includes examples of advanced design patterns (M. Fowler)
 
-App is using apollo client for communicationg with GraphQL server.
+The application uses the apollo client to communicate with the GraphQL server.
 
 Styled components - for styling
 
