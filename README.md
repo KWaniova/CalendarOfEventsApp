@@ -1,3 +1,9 @@
+React calendar application - contains examples of advanced design patterns (M. Fowler)
+
+App is using apollo client for communicationg with GraphQL server.
+
+Styled components - for styling
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
