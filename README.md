@@ -1,8 +1,11 @@
+# React calendar application 
+Full stack application project for the Design Patterns course and Individual Project at Jagiellonian University 2023
+
 React calendar application - includes examples of advanced design patterns (M. Fowler)
 
 The application uses the apollo client to communicate with the GraphQL server.
 
-Styled components - for styling.
+Styling: Styled components.
 
 Uses server written in Python https://github.com/KWaniova/CalendarAppServer.
 
